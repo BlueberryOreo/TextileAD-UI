@@ -2,11 +2,19 @@
     <div class="dashboard-container">
       <el-row :gutter="20">
           <el-card>
-            <h3>模型设置</h3>
+            <h3>模型选择与设置</h3>
             <el-form :model="modelConfig" label-width="120px">
+              <!-- 选择模式 -->
+              <el-form-item label="模式">
+                <el-radio-group v-model="modelConfig.mode" @change="handleModeChange">
+                  <el-radio label="train">训练</el-radio>
+                  <el-radio label="test">测试</el-radio>
+                </el-radio-group>
+              </el-form-item>
+
               <!-- 选择模型 -->
               <el-form-item label="选择模型">
-                <el-select v-model="modelConfig.selectedModel" placeholder="请选择模型">
+                <el-select v-model="modelConfig.selectedModel" placeholder="请选择模型" @change="fetchModelConfigs">
                   <el-option
                     v-for="(model, index) in availableModels"
                     :key="index"
@@ -15,21 +23,51 @@
                   />
                 </el-select>
               </el-form-item>
-  
-              <!-- 选择模式 -->
-              <el-form-item label="模式">
-                <el-radio-group v-model="modelConfig.mode">
-                  <el-radio label="train">训练</el-radio>
-                  <el-radio label="test">测试</el-radio>
-                </el-radio-group>
-              </el-form-item>
               
               <div v-if="modelConfig.mode === 'train'">
                 <!-- <DynamicJsonForm
                   :json="modelConfig"
                   v-model="modelConfig"
                 /> -->
-                Show DynamicJsonForm
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+                  <!-- 模型配置展示 -->
+                  <el-form-item label="模型配置">
+                    <el-input
+                      type="textarea"
+                      :rows="10"
+                      v-model="modelConfigText"
+                      readonly
+                      placeholder="JSON 内容"
+                    />
+                  </el-form-item>
+
+                  <!-- 数据集选择 -->
+                  <el-form-item label="数据集选择">
+                    <el-select
+                      v-model="modelConfig.selectedDataset"
+                      placeholder="请选择数据集"
+                      @change="fetchDatasetConfigs"
+                    >
+                      <el-option
+                        v-for="(dataset, index) in availableDatasets"
+                        :key="index"
+                        :label="dataset"
+                        :value="dataset"
+                      />
+                    </el-select>
+                  </el-form-item>
+
+                  <!-- 数据集参数展示 -->
+                  <el-form-item label="数据集参数设置">
+                    <el-input
+                      type="textarea"
+                      :rows="10"
+                      v-model="datasetConfigText"
+                      readonly
+                      placeholder="JSON 内容"
+                    />
+                  </el-form-item>
+                </div>
               </div>
               <div v-else>
                 <!-- 上传文件 -->
@@ -66,17 +104,34 @@
       return {
         modelConfig: {
           selectedModel: '',  // 选中的模型
+          selectedDataset: '',  // 选中的数据集
           mode: 'train',      // 模式（训练/测试）
         },
         fileList: [], // 存储上传的文件
         availableModels: [], // 存储从后端获取的模型列表
-        logData: [], // 存储日志信息
-        result: null, // 存储结果
+        availableDatasets: [], // 存储从后端获取的数据集列表
+        configs: null, // 存储模型配置
+        datasetConfigs: null, // 存储数据集配置
+        // logData: [], // 存储日志信息
+        // result: null, // 存储结果
       }
     },
     components: {
         // 引入动态表单组件
         // DynamicJsonForm: () => import('@/components/DynamicJsonForm/index.vue'),
+    },
+    computed: {
+      // 计算属性，用于动态生成 JSON 文本
+      modelConfigText: {
+        get(){
+          return JSON.stringify(this.configs, null, 2)
+        }
+      },
+      datasetConfigText: {
+        get(){
+          return JSON.stringify(this.datasetConfigs, null, 2)
+        }
+      }
     },
     methods: {
       // 获取支持的模型列表
@@ -93,7 +148,65 @@
         // console.log("Response:")
         // console.log(response)
       },
-  
+
+      fetchDataset(){
+        axios
+          .get('http://localhost:5000/api/get_datasets') // 调用后端接口获取模型
+          .then(response => {
+            this.availableDatasets = response.data
+          })
+          .catch(error => {
+            console.error('获取数据集失败:', error)
+          })
+      },
+      
+      handleModeChange(){
+        if (this.modelConfig.mode === 'train') {
+          this.fetchModelConfigs()
+        } else {
+          this.configs = null
+        }
+      },
+
+      // 获取模型配置
+      fetchModelConfigs(){
+        if(this.modelConfig.mode != "train"){
+          this.configs = null
+          return
+        }
+        const data = {
+          model_name: this.modelConfig.selectedModel,
+        }
+        axios
+          .post(`http://localhost:5000/api/get_model_config`, data) // 调用后端接口获取模型
+          .then(response => {
+            this.configs = response.data
+          })
+          .catch(error => {
+            console.error('获取模型配置失败:', error)
+            this.configs = null
+          })
+      },
+
+      fetchDatasetConfigs(){
+        if(this.modelConfig.mode != "train"){
+          this.datasetConfigs = null
+          return
+        }
+        const data = {
+          dataset_name: this.modelConfig.selectedDataset,
+        }
+        axios
+          .post(`http://localhost:5000/api/get_dataset_config`, data) // 调用后端接口获取模型
+          .then(response => {
+            this.datasetConfigs = response.data
+          })
+          .catch(error => {
+            console.error('获取数据集配置失败:', error)
+            this.datasetConfigs = null
+          })
+      },
+
       // 处理文件上传前的验证
       beforeUpload(file) {
         const isImage = file.type.startsWith('image/')
@@ -161,6 +274,7 @@
     mounted() {
       // 获取支持的模型列表
       this.fetchModels()
+      this.fetchDataset()
     }
   }
   </script>

@@ -10,7 +10,7 @@ from utils.utils import *
 
 app = Flask(__name__)
 socketio = SocketIO(app)
-CORS(app, supports_credentials=True)
+CORS(app)
 
 # 配置上传文件的目录
 UPLOAD_FOLDER = 'uploads'
@@ -50,7 +50,47 @@ def run_model(images_dir, selected_model, mode):
 @app.route('/api/get_models', methods=['GET'])
 def get_models():
     # 返回支持的模型列表
-    return jsonify(get_supported_models_name())
+    models = get_supported_models_name()
+    # print(models)
+    return jsonify(models)
+
+
+@app.route('/api/get_datasets', methods=['GET'])
+def get_datasets():
+    datasets = get_supported_datasets_name()
+    return jsonify(datasets)
+
+
+@app.route('/api/get_model_config', methods=['POST'])
+def get_model_config():
+    # 获取前端传来的模型名称
+    data = request.get_json()
+    model_name = data.get('model_name')
+    try:
+        config = load_model_config(MAPPER.get(model_name, "null"))
+    except FileNotFoundError as e:
+        print(e)
+        return jsonify({"error": str(e)}), 400
+    except Exception as e:
+        print(e)
+        return jsonify({"error": f"An error occurred while loading the config: {str(e)}."}), 500
+    return jsonify(config)
+
+
+@app.route('/api/get_dataset_config', methods=['POST'])
+def get_dataset_config():
+    # 获取前端传来的数据集名称
+    data = request.get_json()
+    dataset_name = data.get('dataset_name')
+    try:
+        config = load_dataset_config(MAPPER.get(dataset_name, "null"))
+    except FileNotFoundError as e:
+        print(e)
+        return jsonify({"error": str(e)}), 400
+    except Exception as e:
+        print(e)
+        return jsonify({"error": f"An error occurred while loading the config: {str(e)}."}), 500
+    return jsonify(config)
 
 
 @app.route('/api/upload', methods=['POST'])
