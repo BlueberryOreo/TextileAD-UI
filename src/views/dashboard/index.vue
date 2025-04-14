@@ -23,9 +23,17 @@
                   <el-radio label="test">测试</el-radio>
                 </el-radio-group>
               </el-form-item>
-
+              
+              <div v-if="modelConfig.mode === 'train'">
+                <!-- <DynamicJsonForm
+                  :json="modelConfig"
+                  v-model="modelConfig"
+                /> -->
+                Show DynamicJsonForm
+              </div>
+              <div v-else>
                 <!-- 上传文件 -->
-              <el-form-item label="图片上传">
+                <el-form-item label="图片上传">
                 <el-upload
                   class="upload-demo"
                   action=""
@@ -37,6 +45,7 @@
                   <el-button size="small" type="primary">选择文件</el-button>
                 </el-upload>
               </el-form-item>
+              </div>
   
               <!-- 提交按钮 -->
               <el-form-item>
@@ -50,6 +59,7 @@
   
   <script>
   import axios from 'axios'
+//   import DynamicJsonForm from '@/components/DynamicJsonForm/index'
   
   export default {
     data() {
@@ -63,6 +73,10 @@
         logData: [], // 存储日志信息
         result: null, // 存储结果
       }
+    },
+    components: {
+        // 引入动态表单组件
+        // DynamicJsonForm: () => import('@/components/DynamicJsonForm/index.vue'),
     },
     methods: {
       // 获取支持的模型列表
