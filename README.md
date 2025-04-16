@@ -1,6 +1,14 @@
-<p align="center" style="display: flex; justify-content: center; gap: 20px;">
+<!-- <p align="center" style="display: flex; justify-content: center; gap: 20px;">
   <img src="https://wpimg.wallstcn.com/ecc53a42-d79b-42e2-8852-5126b810a4c8.svg" style="max-width: 100%; height: 100%;">
   <img src="./images/logo.png" style="max-width: 20%; height: 20%;">
+</p> -->
+<p align="center">
+<table>
+<tr>
+  <td><img src="https://wpimg.wallstcn.com/ecc53a42-d79b-42e2-8852-5126b810a4c8.svg" style="max-width: 100pt"></td>
+  <td><img src="./images/logo.png" style="max-width: 100pt"></td>
+</tr>
+</table>
 </p>
 
 
@@ -149,4 +157,4 @@ After testing
 
 ## Acknowledgements
 
-This project is built on [anomalib](https://github.com/open-edge-platform/anomalib) and [vue-element-admin](https://github.com/PanJiaChen/vue-element-admin). The authors thank everyone who makes their code and models available. 
+This project is built on [anomalib](https://github.com/open-edge-platform/anomalib) and [vue-element-admin](https://github.com/PanJiaChen/vue-element-admin). The authors thank everyone who makes their code available. 
