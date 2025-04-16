@@ -129,11 +129,23 @@ Refer to [Documentation](https://panjiachen.github.io/vue-element-admin-site/gui
 
 ### Test settings
 
-![test_setting_page1](./images/test_setting_page.png)
+![test_setting_page1](./images/test_setting_page1.png)
+
+![test_setting_page2](./images/test_setting_page2.png)
 
 ### Training progress
 
 ![training_page](./images/training_page.png)
+
+### Results
+
+After training
+
+![results_page_from_train](./images/results_page_from_train.png)
+
+After testing
+
+![results_page_from_test](./images/results_page_from_test.png)
 
 ## Acknowledgements
 
