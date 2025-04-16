@@ -3,7 +3,7 @@
   <img src="./images/logo.png" style="max-width: 20%; height: 20%;">
 </p> -->
 <p align="center">
-<table>
+<table style="border: 1px solid transparent;">
 <tr>
   <td><img src="https://wpimg.wallstcn.com/ecc53a42-d79b-42e2-8852-5126b810a4c8.svg" style="max-width: 100pt"></td>
   <td><img src="./images/logo.png" style="max-width: 100pt"></td>
