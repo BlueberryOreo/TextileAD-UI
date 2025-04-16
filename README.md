@@ -2,10 +2,10 @@
   <img src="https://wpimg.wallstcn.com/ecc53a42-d79b-42e2-8852-5126b810a4c8.svg" style="max-width: 100%; height: 100%;">
   <img src="./images/logo.png" style="max-width: 20%; height: 20%;">
 </p> -->
-<div style="display: flex; display: flex; align-items: center;">
+<p align="center" style="display: flex; display: flex; align-items: center;">
   <img src="https://wpimg.wallstcn.com/ecc53a42-d79b-42e2-8852-5126b810a4c8.svg">
-  <img src="./images/logo.png">
-</div>
+  <img src="./images/logo.png" style="max-width: 100pt">
+</p>
 
 
 <p align="center">
