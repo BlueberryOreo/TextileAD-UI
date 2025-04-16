@@ -74,7 +74,7 @@ export const constantRoutes = [
     children: [
       {
         path: 'logging_panel',
-        component: () => import('@/views/logging/logging'),
+        component: () => import('@/views/logging/index'),
         name: 'Logging',
         meta: { title: 'Logging'},
       }
@@ -87,7 +87,7 @@ export const constantRoutes = [
     children: [
       {
         path: 'result_panel',
-        component: () => import('@/views/results/results'),
+        component: () => import('@/views/results_panel/index'),
         name: 'Results',
         meta: { title: 'Results'},
       }
