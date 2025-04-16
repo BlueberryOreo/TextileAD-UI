@@ -76,7 +76,7 @@ export const constantRoutes = [
         path: 'logging_panel',
         component: () => import('@/views/logging/logging'),
         name: 'Logging',
-        meta: { title: 'Logging', icon: 'example'},
+        meta: { title: 'Logging'},
       }
     ]
   },
@@ -89,7 +89,7 @@ export const constantRoutes = [
         path: 'result_panel',
         component: () => import('@/views/results/results'),
         name: 'Results',
-        meta: { title: 'Results', icon: 'example'},
+        meta: { title: 'Results'},
       }
     ]
   }

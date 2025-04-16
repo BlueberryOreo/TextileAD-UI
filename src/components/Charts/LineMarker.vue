@@ -24,11 +24,27 @@ export default {
     height: {
       type: String,
       default: '200px'
+    },
+    chartData: {
+      type: Object,
+      default: () => ({ loss: 0 })
+    },
+    epoch: {
+      type: Number,
+      default: 0
     }
   },
   data() {
     return {
-      chart: null
+      chart: null,
+      localChartData: JSON.parse(JSON.stringify(this.chartData)),
+    }
+  },
+  watch: {
+    chartData(newData) {
+      console.log(newData)
+      this.localChartData = JSON.parse(JSON.stringify(newData))
+      this.updatechartData()
     }
   },
   mounted() {
@@ -43,13 +59,14 @@ export default {
   },
   methods: {
     initChart() {
+      // console.log(this.ChartData)
       this.chart = echarts.init(document.getElementById(this.id))
 
       this.chart.setOption({
         backgroundColor: '#394056',
         title: {
           top: 20,
-          text: 'Requests',
+          text: '损失可视化',
           textStyle: {
             fontWeight: 'normal',
             fontSize: 16,
@@ -71,7 +88,7 @@ export default {
           itemWidth: 14,
           itemHeight: 5,
           itemGap: 13,
-          data: ['CMCC', 'CTCC', 'CUCC'],
+          data: ['loss'],
           right: '4%',
           textStyle: {
             fontSize: 12,
@@ -87,17 +104,18 @@ export default {
         },
         xAxis: [{
           type: 'category',
+          name: 'epoch',
           boundaryGap: false,
           axisLine: {
             lineStyle: {
               color: '#57617B'
             }
           },
-          data: ['13:00', '13:05', '13:10', '13:15', '13:20', '13:25', '13:30', '13:35', '13:40', '13:45', '13:50', '13:55']
+          data: [0]
         }],
         yAxis: [{
           type: 'value',
-          name: '(%)',
+          name: 'loss',
           axisTick: {
             show: false
           },
@@ -118,110 +136,57 @@ export default {
             }
           }
         }],
-        series: [{
-          name: 'CMCC',
-          type: 'line',
-          smooth: true,
-          symbol: 'circle',
-          symbolSize: 5,
-          showSymbol: false,
-          lineStyle: {
-            normal: {
-              width: 1
-            }
-          },
-          areaStyle: {
-            normal: {
-              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                offset: 0,
-                color: 'rgba(137, 189, 27, 0.3)'
-              }, {
-                offset: 0.8,
-                color: 'rgba(137, 189, 27, 0)'
-              }], false),
-              shadowColor: 'rgba(0, 0, 0, 0.1)',
-              shadowBlur: 10
-            }
-          },
-          itemStyle: {
-            normal: {
-              color: 'rgb(137,189,27)',
-              borderColor: 'rgba(137,189,2,0.27)',
-              borderWidth: 12
-
-            }
-          },
-          data: [220, 182, 191, 134, 150, 120, 110, 125, 145, 122, 165, 122]
-        }, {
-          name: 'CTCC',
-          type: 'line',
-          smooth: true,
-          symbol: 'circle',
-          symbolSize: 5,
-          showSymbol: false,
-          lineStyle: {
-            normal: {
-              width: 1
-            }
-          },
-          areaStyle: {
-            normal: {
-              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                offset: 0,
-                color: 'rgba(0, 136, 212, 0.3)'
-              }, {
-                offset: 0.8,
-                color: 'rgba(0, 136, 212, 0)'
-              }], false),
-              shadowColor: 'rgba(0, 0, 0, 0.1)',
-              shadowBlur: 10
-            }
-          },
-          itemStyle: {
-            normal: {
-              color: 'rgb(0,136,212)',
-              borderColor: 'rgba(0,136,212,0.2)',
-              borderWidth: 12
-
-            }
-          },
-          data: [120, 110, 125, 145, 122, 165, 122, 220, 182, 191, 134, 150]
-        }, {
-          name: 'CUCC',
-          type: 'line',
-          smooth: true,
-          symbol: 'circle',
-          symbolSize: 5,
-          showSymbol: false,
-          lineStyle: {
-            normal: {
-              width: 1
-            }
-          },
-          areaStyle: {
-            normal: {
-              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                offset: 0,
-                color: 'rgba(219, 50, 51, 0.3)'
-              }, {
-                offset: 0.8,
-                color: 'rgba(219, 50, 51, 0)'
-              }], false),
-              shadowColor: 'rgba(0, 0, 0, 0.1)',
-              shadowBlur: 10
-            }
-          },
-          itemStyle: {
-            normal: {
-              color: 'rgb(219,50,51)',
-              borderColor: 'rgba(219,50,51,0.2)',
-              borderWidth: 12
-            }
-          },
-          data: [220, 182, 125, 145, 122, 191, 134, 150, 120, 110, 165, 122]
-        }]
+        // series: Object.entries(this.ChartData).map(([key, value]) => ({
+        //       name: key,
+        //       type: 'line',
+        //       smooth: true,
+        //       symbol: 'circle',
+        //       symbolSize: 3,
+        //       showSymbol: false,
+        //       data: value
+        //   })),
+        // series: this.ChartData
       })
-    }
+    },
+
+    updatechartData(){
+      const epochsArray = Array.from({ length: this.epoch + 1 }, (_, i) => i);
+      this.chart.setOption({
+          xAxis: [{
+              type: 'category',
+              name: 'epoch',
+              boundaryGap: false,
+              axisLine: {
+                  lineStyle: {
+                  color: '#57617B'
+                  }
+              },
+              data: epochsArray,
+          }],
+          legend: {
+            top: 20,
+            icon: 'rect',
+            itemWidth: 14,
+            itemHeight: 5,
+            itemGap: 13,
+            data: Object.entries(this.localChartData).map(([key]) => key),
+            right: '4%',
+            textStyle: {
+              fontSize: 12,
+              color: '#F1F1F3'
+            }
+          },
+          series: Object.entries(this.localChartData).map(([key, value]) => ({
+              name: key,
+              type: 'line',
+              smooth: true,
+              symbol: 'circle',
+              symbolSize: 3,
+              showSymbol: false,
+              data: value
+          }))
+      })
+    },
   }
 }
 </script>
