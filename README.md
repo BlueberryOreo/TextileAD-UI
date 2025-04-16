@@ -4,7 +4,7 @@
 </p> -->
 <p align="center" style="display: flex; display: flex; align-items: center;">
   <img src="https://wpimg.wallstcn.com/ecc53a42-d79b-42e2-8852-5126b810a4c8.svg">
-  <img src="./images/logo.png">
+  <img src="./images/logo.ico">
 </p>
 
 
