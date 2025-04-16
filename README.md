@@ -20,7 +20,7 @@
   </a>
 </p>
 
-English | [简体中文](./README.zh-CN.md) | [日本語](./README.ja.md) | [Spanish](./README.es.md)
+English | [简体中文](./README.zh-CN.md)
 
 <!-- <p align="center">
   <b>SPONSORED BY</b>
@@ -59,24 +59,6 @@ Modern browsers and Internet Explorer 10+.
 | --------- | --------- | --------- | --------- |
 | IE10, IE11, Edge | last 2 versions | last 2 versions | last 2 versions |
 
-### Frontend
-
-```bash
-# clone the project
-git clone https://github.com/BlueberryOreo/TextileAD-UI.git
-
-# enter the project directory
-cd TextileAD-UI
-
-# install dependency
-npm install
-
-# develop
-npm run dev
-```
-
-This will automatically open http://localhost:9527
-
 ### Server
 
 ```bash
@@ -94,6 +76,24 @@ python app.py --debug
 ```
 
 This will automatically run on http://localhost:5000
+
+### Frontend
+
+```bash
+# clone the project
+git clone https://github.com/BlueberryOreo/TextileAD-UI.git
+
+# enter the project directory
+cd TextileAD-UI
+
+# install dependency
+npm install
+
+# develop
+npm run dev
+```
+
+This will automatically open http://localhost:9527
 
 ## Build
 
