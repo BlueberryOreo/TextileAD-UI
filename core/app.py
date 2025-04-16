@@ -1,11 +1,21 @@
 import os
 import random
-os.environ["CUDA_VISIBLE_DEVICES"] = "4"
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--host', type=str, default='localhost', help='Host address')
+parser.add_argument('--port', type=int, default=5000, help='Port number')
+parser.add_argument('--debug', action='store_true', help='Enable debug mode')
+parser.add_argument('--gpu_id', type=str, default='0', help='GPU ID to use')
+args = parser.parse_args()
+
+os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu_id
 
 from flask import Flask, request, jsonify, send_from_directory
 from flask_socketio import SocketIO, emit
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
+
 
 from utils.utils import *
 from run_train import before_training, training, after_training
@@ -215,7 +225,7 @@ def get_results():
         return jsonify({"error": f"An error occurred while loading the config: {str(e)}."}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=args.debug)
     # 启动 Flask-SocketIO
-    socketio.run(app, host='localhost', port=5000, allow_unsafe_werkzeug=True)
+    socketio.run(app, host=args.host, port=args.port, allow_unsafe_werkzeug=True)
 
